@@ -6,22 +6,22 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
-############ INSTALL DEPENDENCIES
+############# INSTALL DEPENDENCIES ############# 
 apt-get update
 echo "Please use abc123 as MySQL root password. Change it later if you want"
 sleep 2
 apt-get install -y subversion python-dev openssl python-openssl python-pyasn1 python-twisted python-mysqldb mysql-server
 
 
-############ USER KIPPO
+############# USER KIPPO ############# 
 adduser kippo
 
 
-############ KIPPO BINS
+############# KIPPO BINS ############# 
 su kippo -c 'svn checkout http://kippo.googlecode.com/svn/trunk/ ~/kippo/'
 
 
-############ MYSQL STUFF
+############# MYSQL STUFF ############# 
 Q1="CREATE DATABASE IF NOT EXISTS kippodb;"
 Q2="GRANT ALL ON kippodb.* TO 'kippousr'@'localhost' IDENTIFIED BY 'abc123';"
 Q3="FLUSH PRIVILEGES;"
@@ -29,9 +29,10 @@ SQL="${Q1}${Q2}${Q3}"
 mysql -uroot -pabc123 -e "$SQL"
 mysql -uroot -pabc123 kippodb < /home/kippo/kippo/doc/sql/mysql.sql
 
-############ KIPPO CONFIG
+############# KIPPO CONFIG ############# 
 su kippo -c 'cp ~/kippo/kippo.cfg.dist ~/kippo/kippo.cfg'
 sed -i 's/ssh_port = 2222/ssh_port = 9999/g' /home/kippo/kippo/kippo.cfg
+sed -i 's/hostname = nas3/hostname = accounts/' /home/kippo/kippo/kippo.cfg
 sed -i 's/\#\[database_mysql\]/\[database_mysql\]/' /home/kippo/kippo/kippo.cfg
 sed -i 's/\#host = localhost/host = localhost/' /home/kippo/kippo/kippo.cfg
 sed -i 's/\#database = kippo/database = kippodb/' /home/kippo/kippo/kippo.cfg
@@ -39,7 +40,11 @@ sed -i 's/\#username = kippo/username = kippousr/' /home/kippo/kippo/kippo.cfg
 sed -i 's/\#password = secret/password = abc123/' /home/kippo/kippo/kippo.cfg
 sed -i 's/\#port = 3306/port = 3306/g' /home/kippo/kippo/kippo.cfg
 
+wget -O /home/kippo/kippo/data/userdb.txt https://raw.github.com/xarly/HoneyPFG/master/kippo_userdb
 
+cd /home/kippo/kippo
+utils/createfs.py > fs.pickle 
+df -h > txtcmds/bin/df
 
 ############# PORT 22 STUFF ############# 
 iptables -t nat -A PREROUTING -p tcp --dport 22 -j REDIRECT --to-port 9999
