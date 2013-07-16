@@ -40,7 +40,7 @@ sed -i 's/\#username = kippo/username = kippousr/' /home/kippo/kippo/kippo.cfg
 sed -i 's/\#password = secret/password = abc123/' /home/kippo/kippo/kippo.cfg
 sed -i 's/\#port = 3306/port = 3306/g' /home/kippo/kippo/kippo.cfg
 
-wget -O /home/kippo/kippo/data/userdb.txt https://raw.github.com/xarly/HoneyPFG/master/kippo_userdb
+su kippo -c 'wget -O /home/kippo/kippo/data/userdb.txt https://raw.github.com/xarly/HoneyPFG/master/kippo_userdb'
 
 cd /home/kippo/kippo
 utils/createfs.py > fs.pickle 
