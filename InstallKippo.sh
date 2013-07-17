@@ -10,7 +10,7 @@ fi
 apt-get update
 echo "Please use abc123 as MySQL root password. Change it later if you want"
 sleep 2
-apt-get install -y subversion python-dev openssl python-openssl python-pyasn1 python-twisted python-mysqldb mysql-server
+apt-get install -y subversion gcc python-dev openssl python-openssl python-pyasn1 python-twisted python-mysqldb mysql-server
 
 
 ############# USER KIPPO ############# 
@@ -45,6 +45,11 @@ su kippo -c 'wget -O /home/kippo/kippo/data/userdb.txt https://raw.github.com/xa
 cd /home/kippo/kippo
 utils/createfs.py > fs.pickle 
 df -h > txtcmds/bin/df
+
+# Add extra commands https://github.com/basilfx/kippo-extra
+pip install kippo-extra
+echo "from kippo_extra import loader" >> /home/kippo/kippo/kippo/__init__.py
+
 
 ############# PORT 22 STUFF ############# 
 iptables -t nat -A PREROUTING -p tcp --dport 22 -j REDIRECT --to-port 9999
