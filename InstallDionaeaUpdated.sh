@@ -114,6 +114,7 @@ sed -i 's/^\/\/\t\t\t"virustotal"/\t\t\t"virustotal"/' /opt/dionaea/etc/dionaea/
 sed -i 's/ident = ""/ident = "'$IDENT'"/' /opt/dionaea/etc/dionaea/dionaea.conf
 sed -i 's/secret = ""/secret = "'$SECRET'"/' /opt/dionaea/etc/dionaea/dionaea.conf
 sed -i 's/apikey =/apikey = "'$VTAPI'" \/\//g' /opt/dionaea/etc/dionaea/dionaea.conf
+sed -i 's/"epmap", "sip","mssql", "mysql"/"mysql"\/*"epmap", "sip", "mssql"*\//' /opt/dionaea/etc/dionaea/dionaea.conf
 sed -i 's/"Welcome to the ftp service"/"Microsoft FTP Service"/g' /opt/dionaea/lib/dionaea/python/dionaea/ftp.py
 
 chown nobody:nogroup /opt/dionaea/var/dionaea -R
